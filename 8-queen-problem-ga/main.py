@@ -4,7 +4,7 @@ import numpy as np
 
 STOP_FLAG = False
 
-def fitness(chromosome):
+def fitness(chromosome, n_queen):
     global STOP_FLAG
     attacks = abs(len(chromosome) - len(np.unique(chromosome)))
     for i in range(len(chromosome)):
@@ -15,36 +15,48 @@ def fitness(chromosome):
                 if(dx == dy):
                     attacks+=1
     if(attacks == 0):
+        printBoard(chromosome)
         print(chromosome)
         STOP_FLAG = True
-    return 28 - attacks
+    return (((n_queen-1)*n_queen)/2)-attacks
+    #return 28 - attacks
 
-def getPopulation(size):
+def getPopulation(size, n_queen):
     population = []
     for _ in range(size):
-        population.append(random.sample(range(1,9), 8))
+        population.append(random.sample(range(1,n_queen+1), n_queen))
     return population
 
-def reproduce(x,y):
-    c = random.randint(0,7)
-    child = x[0:c]+y[c:8]
+def reproduce(x,y, n_queen):
+    c = random.randint(0,n_queen-1)
+    child = x[0:c]+y[c:n_queen]
     return child
 
-def mutate(child, mutprob):
+def mutate(child, mutprob, n_queen):
     for i in range(len(child)):
         if(random.random() < mutprob):
-            child[i] = random.randint(1,8)
+            child[i] = random.randint(1,n_queen)
+
+def printBoard(chromosome):
+    for i in range(8):
+        for j in range(8):
+            if(chromosome[j] == i+1):
+                print("X ", end='')
+            else:
+                print(". ", end='')
+        print("\n")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--maxiter', type=int, default=100000)
 parser.add_argument('--popsize', type=int, default=10)
 parser.add_argument('--mutprob', type=float, default=0.05)
+parser.add_argument('--nqueen', type=int, default=8)
 args = parser.parse_args()
 
-population = getPopulation(args.popsize)
+population = getPopulation(args.popsize,args.nqueen)
 
 for i in range(args.maxiter):
-    fit_prob = [(fitness(i)/len(population))*100 for i in population]
+    fit_prob = [(fitness(i, args.nqueen)/len(population))*100 for i in population]
     if(STOP_FLAG):
         break
     new_pop = []
@@ -53,7 +65,7 @@ for i in range(args.maxiter):
         y = random.choices(population, weights=fit_prob)[0]
         while(y == x):
            y = random.choices(population, weights=fit_prob)[0]
-        child = reproduce(x,y)
-        mutate(child, args.mutprob)
+        child = reproduce(x,y,args.nqueen)
+        mutate(child, args.mutprob,args.nqueen)
         new_pop.append(child)
     population = new_pop.copy()
