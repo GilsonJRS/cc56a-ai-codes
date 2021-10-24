@@ -15,7 +15,7 @@ def fitness(chromosome, n_queen):
                 if(dx == dy):
                     attacks+=1
     if(attacks == 0):
-        printBoard(chromosome)
+        printBoard(chromosome, n_queen)
         print(chromosome)
         STOP_FLAG = True
     return (((n_queen-1)*n_queen)/2)-attacks
@@ -37,9 +37,9 @@ def mutate(child, mutprob, n_queen):
         if(random.random() < mutprob):
             child[i] = random.randint(1,n_queen)
 
-def printBoard(chromosome):
-    for i in range(8):
-        for j in range(8):
+def printBoard(chromosome, n_queen):
+    for i in reversed(range(n_queen)):
+        for j in range(n_queen):
             if(chromosome[j] == i+1):
                 print("X ", end='')
             else:
