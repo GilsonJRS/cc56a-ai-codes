@@ -9,19 +9,24 @@ class BFS:
         q.put([start,graph[start],[start]])
 
         visited[graph_keys.index(start)] = 0
+        path_visited = [start]
 
         while(not q.empty()):
             v = q.get()
             
             for i in list(v[1].keys()):
+                
                 if(i==end):
                     path = v[2]+[end]
                     path_cost = 0
                     for j,k in zip(path, path[1:]):
                         path_cost += list(graph[j][k].values())[0]
-                    print('Caminho :', path)
+                    print('Salas visitadas:', path_visited+[end])
+                    print('Caminho encontrado:', path)
                     print('Custo: ', path_cost)
                     return path
+                
                 if(visited[graph_keys.index(i)] != 0):
+                    path_visited.append(i)
                     q.put([i, graph[i], v[2] + [i]])
                     visited[graph_keys.index(i)] = 0

@@ -5,6 +5,7 @@ class DFS:
 
         stack = []
         stack.append([start,graph[start],[start]])
+        path_visited = []
 
         while(len(stack) != 0):
             v = stack.pop()
@@ -16,11 +17,13 @@ class DFS:
                 path_cost = 0
                 for j,k in zip(v[2], v[2][1:]):
                     path_cost += list(graph[j][k].values())[0]
+                print('Salas visitadas:', path_visited+[v[0]])
                 print('Caminho: ', v[2])
                 print('Custo: ', path_cost)
                 return v[2]
 
             visited[graph_keys.index(v[0])] = 0
+            path_visited.append(v[0])
 
             for i in list(v[1].keys()):
                 stack.append([i, graph[i], v[2] + [i]])

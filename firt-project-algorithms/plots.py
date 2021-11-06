@@ -51,9 +51,32 @@ pos = {
     'U' : (14,1)
 }
 
+colors = [
+    'red',
+    'blue',
+    'red',
+    'blue',
+    'blue',
+    'blue',
+    'red',
+    'red',
+    'blue',
+    'blue',
+    'blue',
+    'red',
+    'red',
+    'blue',
+    'blue',
+    'red',
+    'blue',
+    'blue',
+    'blue',
+    'red',
+    'red'
+]
 #pos = nx.spectral_layout(graph, scale=2)
-plt.figure(figsize=(15,15))
-nx.draw_networkx(graph, pos, with_labels=True)
+#plt.figure(figsize=(15,15))
+nx.draw_networkx(graph, pos, with_labels=True, node_color=colors)
 
 wei = nx.get_edge_attributes(graph, 'weight')
 nx.draw_networkx_edge_labels(graph, pos, edge_labels=wei)
